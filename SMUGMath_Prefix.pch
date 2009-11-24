@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'SMUGMath' target in the 'SMUGMath' project.
+//
+
+#ifdef __OBJC__
+    #import <Cocoa/Cocoa.h>
+#endif
