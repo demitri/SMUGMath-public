@@ -35,10 +35,24 @@
     return self;    
 }
 
+#pragma mark NSObject
+
 - (void)dealloc
 {
     [mData release];
     [super dealloc];
+}
+
+- (NSString*)description
+{
+    NSMutableString *returnString = [NSMutableString string];
+    unsigned int i;
+    [returnString appendFormat:@"\n\n"];
+    for ( i = 0; i < [self length]; i++ ) {
+        [returnString appendFormat:@"%4f ", [self componentAtIndex:i]];
+    }
+    [returnString appendFormat:@"\n"];
+    return returnString;
 }
 
 #pragma mark Convenience Constructors
