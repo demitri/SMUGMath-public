@@ -9,3 +9,4 @@
 
 #import <SMUGMath/SMUGRealVector.h>
 #import <SMUGMath/SMUGComplexVector.h>
+#import <SMUGMath/SMUGRealMatrix.h>
