@@ -48,6 +48,7 @@
 #pragma mark Manipulation Routines
 - (void)reverse;
 - (void)circularShiftBy:(int)amount;
+- (void)overlapAddRealVector:(SMUGRealVector*)inVector atComponent:(unsigned int)inStartIndex;
 
 #pragma mark Minimum/Maximum
 - (void)getMinimum:(float*)min location:(unsigned int*)loc;

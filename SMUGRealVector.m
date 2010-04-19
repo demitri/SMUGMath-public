@@ -256,6 +256,22 @@
     [self replaceComponentsInRange:NSMakeRange( [b length], [a length] ) withRealVector:a];
 }
 
+- (void)overlapAddRealVector:(SMUGRealVector*)inVector atComponent:(unsigned int)inStartIndex;
+{
+    if ( inStartIndex >= [self length] ) {
+        [NSException raise:@"OutOfBounds" format:@"Trying to overlap-add past vector length"];
+    }
+    
+    unsigned int newLength = MAX( inStartIndex + [inVector length], [self length] );
+    
+    // Resize if necessary, for convenience
+    if ( newLength > [self length] ) {
+        [self setLength:newLength];
+    }
+    
+    vDSP_vadd( ( [self components] + inStartIndex ), 1, [inVector components], 1, ( [self components] + inStartIndex ), 1, [inVector length] );
+}
+
 #pragma mark Minimum/Maximum
 
 - (void)getMinimum:(float*)oMin location:(unsigned int*)oLoc;
