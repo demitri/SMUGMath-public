@@ -35,6 +35,17 @@
     return self;    
 }
 
+- (id)initWithBytesNoCopy:(float*)inBytes length:(NSUInteger)inLength;
+{
+    if ( !( self = [super init] ) ) {
+        return nil;
+    }
+    
+    mData = [[NSMutableData alloc] initWithBytesNoCopy:inBytes length:(inLength * sizeof(float)) freeWhenDone:NO];
+    
+    return self;
+}
+
 #pragma mark NSObject
 
 - (void)dealloc
@@ -81,6 +92,11 @@
 + (id)realVectorWithData:(NSData*)data;
 {
     return [[[SMUGRealVector alloc] initWithData:data] autorelease];
+}
+
++ (id)realVectorWithBytesNoCopy:(float*)inBytes length:(NSUInteger)inLength;
+{
+    return [[[SMUGRealVector alloc] initWithBytesNoCopy:inBytes length:inLength] autorelease];
 }
 
 + (id)realVectorWithContentsOfMappedFile:(NSString*)path;
@@ -175,6 +191,15 @@
                                 withFloats:&([self components][range.location])];
     
     return returnVector;
+}
+
+- (SMUGRealVector*)realVectorInRangeNoCopy:(NSRange)inRange;
+{
+    if ( inRange.location + inRange.length > [self length] ) {
+        [NSException raise:NSRangeException
+                    format:@"Trying to retrieve vector outside bounds"];
+    }
+    return [SMUGRealVector realVectorWithBytesNoCopy:([self components] + inRange.location) length:inRange.length];
 }
 
 - (void)replaceComponentsInRange:(NSRange)range withFloats:(float*)data;

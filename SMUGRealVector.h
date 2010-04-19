@@ -13,11 +13,13 @@
 #pragma mark Initializers
 - (id)initWithLength:(unsigned int)N;
 - (id)initWithData:(NSData*)data;
+- (id)initWithBytesNoCopy:(float*)inBytes length:(NSUInteger)inLength;
 
 #pragma mark Convenience Constructors
 + (id)realVectorWithLength:(unsigned int)N;
 + (id)realVectorWithComponents:(unsigned int)N,...;
 + (id)realVectorWithData:(NSData*)data;
++ (id)realVectorWithBytesNoCopy:(float*)inBytes length:(NSUInteger)inLength;
 + (id)realVectorWithContentsOfMappedFile:(NSString*)path;
 
 #pragma mark Specialized Convenience Constructors
@@ -36,6 +38,7 @@
 
 #pragma mark Range Operations
 - (SMUGRealVector*)realVectorInRange:(NSRange)range;
+- (SMUGRealVector*)realVectorInRangeNoCopy:(NSRange)inRange;
 - (void)replaceComponentsInRange:(NSRange)range withFloats:(float*)data;
 - (void)replaceComponentsInRange:(NSRange)range withRealVector:(SMUGRealVector*)floatData;
 
