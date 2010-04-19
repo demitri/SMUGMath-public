@@ -8,11 +8,16 @@
 
 #import "SMUGRealVector.h"
 
+@class SMUGRealFFTPlan;
+
 @interface SMUGRealVector (FFT)
 
 // Performs a real-valued FFT. N/2+1 values are returned, since the FFT results
 // for a real-valued input array are symmetric about the nyquist frequency. The
 // First element in the array is the DC component.
 - (SMUGComplexVector*)fft;
+
+// Same as above, but you can use a pre-allocated plan to save a bit of time
+- (SMUGComplexVector*)fftWithPlan:(SMUGRealFFTPlan*)inPlan;
 
 @end

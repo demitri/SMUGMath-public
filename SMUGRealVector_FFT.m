@@ -8,6 +8,7 @@
 
 #import "SMUGRealVector_FFT.h"
 #import "SMUGComplexVector.h"
+#import "SMUGRealFFTPlan.h"
 #import "kiss_fftr.h"
 
 @implementation SMUGRealVector (FFT)
@@ -34,6 +35,19 @@
     kiss_fftr_cfg       fftConfig = kiss_fftr_alloc( N, 0, NULL, NULL );
     kiss_fftr( fftConfig, [self components], (kiss_fft_cpx*)[ret components] );
     kiss_fftr_free( fftConfig );
+    return ret;
+}
+
+- (SMUGComplexVector*)fftWithPlan:(SMUGRealFFTPlan*)inPlan
+{
+    if ( [self length] == 0 ) {
+        [NSException raise:@"FFTZeroLength" format:@"Tried to perform 0-length FFT"];
+    }
+    if ( [self length] != inPlan.fftSize ) {
+        [NSException raise:@"FFTSizeMismatch" format:@"Plan does not match fft length"];
+    }
+    SMUGComplexVector *ret = [SMUGComplexVector complexVectorWithLength:([self length]/2)+1];
+    kiss_fftr( inPlan.forwardPlan, [self components], (kiss_fft_cpx*)[ret components] );
     return ret;
 }
 

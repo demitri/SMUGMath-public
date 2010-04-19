@@ -25,6 +25,8 @@
 		83207A0B117CA5B8009B6339 /* SMUGComplexVector_FFT.m in Sources */ = {isa = PBXBuildFile; fileRef = 83207A09117CA5B8009B6339 /* SMUGComplexVector_FFT.m */; };
 		83207A22117CA841009B6339 /* FFTTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 83207A15117CA7BA009B6339 /* FFTTests.m */; };
 		83207A25117CA85B009B6339 /* SMUGRealMatrix.m in Sources */ = {isa = PBXBuildFile; fileRef = 834752A310D9851600856D12 /* SMUGRealMatrix.m */; };
+		83207BBF117CD6FC009B6339 /* SMUGRealFFTPlan.h in Headers */ = {isa = PBXBuildFile; fileRef = 83207BBD117CD6FC009B6339 /* SMUGRealFFTPlan.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		83207BC0117CD6FC009B6339 /* SMUGRealFFTPlan.m in Sources */ = {isa = PBXBuildFile; fileRef = 83207BBE117CD6FC009B6339 /* SMUGRealFFTPlan.m */; };
 		832D740C10BB2FF3000AAAED /* ComplexVectorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 832D740B10BB2FF3000AAAED /* ComplexVectorTests.m */; };
 		832D740F10BB3005000AAAED /* SMUGComplexVector.h in Headers */ = {isa = PBXBuildFile; fileRef = 832D740D10BB3005000AAAED /* SMUGComplexVector.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		832D741010BB3005000AAAED /* SMUGComplexVector.m in Sources */ = {isa = PBXBuildFile; fileRef = 832D740E10BB3005000AAAED /* SMUGComplexVector.m */; };
@@ -73,6 +75,8 @@
 		83207A09117CA5B8009B6339 /* SMUGComplexVector_FFT.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SMUGComplexVector_FFT.m; sourceTree = "<group>"; };
 		83207A14117CA7BA009B6339 /* FFTTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFTTests.h; sourceTree = "<group>"; };
 		83207A15117CA7BA009B6339 /* FFTTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFTTests.m; sourceTree = "<group>"; };
+		83207BBD117CD6FC009B6339 /* SMUGRealFFTPlan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMUGRealFFTPlan.h; sourceTree = "<group>"; };
+		83207BBE117CD6FC009B6339 /* SMUGRealFFTPlan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SMUGRealFFTPlan.m; sourceTree = "<group>"; };
 		832D740A10BB2FF3000AAAED /* ComplexVectorTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComplexVectorTests.h; sourceTree = "<group>"; };
 		832D740B10BB2FF3000AAAED /* ComplexVectorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComplexVectorTests.m; sourceTree = "<group>"; };
 		832D740D10BB3005000AAAED /* SMUGComplexVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMUGComplexVector.h; sourceTree = "<group>"; };
@@ -166,6 +170,8 @@
 				832D740E10BB3005000AAAED /* SMUGComplexVector.m */,
 				83207A08117CA5B8009B6339 /* SMUGComplexVector_FFT.h */,
 				83207A09117CA5B8009B6339 /* SMUGComplexVector_FFT.m */,
+				83207BBD117CD6FC009B6339 /* SMUGRealFFTPlan.h */,
+				83207BBE117CD6FC009B6339 /* SMUGRealFFTPlan.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -241,6 +247,7 @@
 				832079E1117C9D15009B6339 /* kiss_fftr.h in Headers */,
 				832079F1117C9E0B009B6339 /* SMUGRealVector_FFT.h in Headers */,
 				83207A0A117CA5B8009B6339 /* SMUGComplexVector_FFT.h in Headers */,
+				83207BBF117CD6FC009B6339 /* SMUGRealFFTPlan.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -362,6 +369,7 @@
 				832079EB117C9D7A009B6339 /* SMUGRealVector_FFT.m in Sources */,
 				83207A0B117CA5B8009B6339 /* SMUGComplexVector_FFT.m in Sources */,
 				83207A25117CA85B009B6339 /* SMUGRealMatrix.m in Sources */,
+				83207BC0117CD6FC009B6339 /* SMUGRealFFTPlan.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
