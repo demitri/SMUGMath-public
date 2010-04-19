@@ -282,4 +282,24 @@
     }    
 }
 
+- (void)testOverlapAdd
+{
+    SMUGRealVector *ones = [SMUGRealVector onesWithLength:16];
+    SMUGRealVector *result = [SMUGRealVector onesWithLength:64];
+
+    for ( int i = 0; i < 7; i++ ) {
+        [result overlapAddRealVector:ones atComponent:(i*8)];
+    }
+    
+    for ( int i = 0; i < 8; i++ ) {
+        STAssertEquals( [result componentAtIndex:i], 2.0f, @"Components not equal" );
+    }
+    for ( int i = 8; i < 56; i++ ) {
+        STAssertEquals( [result componentAtIndex:i], 3.0f, @"Components not equal" );
+    }
+    for ( int i = 56; i < 64; i++ ) {
+        STAssertEquals( [result componentAtIndex:i], 2.0f, @"Components not equal" );
+    }    
+}
+
 @end
