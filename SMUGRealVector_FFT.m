@@ -40,15 +40,23 @@
 
 - (SMUGComplexVector*)fftWithPlan:(SMUGRealFFTPlan*)inPlan
 {
+    SMUGComplexVector *ret = [SMUGComplexVector complexVectorWithLength:([self length]/2)+1];
+    [self fftIntoComplexVector:ret withPlan:inPlan];
+    return ret;
+}
+
+- (void)fftIntoComplexVector:(SMUGComplexVector*)inComplexVector withPlan:(SMUGRealFFTPlan*)inPlan
+{
     if ( [self length] == 0 ) {
         [NSException raise:@"FFTZeroLength" format:@"Tried to perform 0-length FFT"];
     }
     if ( [self length] != inPlan.fftSize ) {
         [NSException raise:@"FFTSizeMismatch" format:@"Plan does not match fft length"];
     }
-    SMUGComplexVector *ret = [SMUGComplexVector complexVectorWithLength:([self length]/2)+1];
-    kiss_fftr( inPlan.forwardPlan, [self components], (kiss_fft_cpx*)[ret components] );
-    return ret;
+    if ( [inComplexVector length] != (([self length]/2)+1) ) {
+        [NSException raise:@"FFTOutputVectorSizeMismatch" format:@"Supplied input vector not proper length"];
+    }
+    kiss_fftr( inPlan.forwardPlan, [self components], (kiss_fft_cpx*)[inComplexVector components] );
 }
 
 @end

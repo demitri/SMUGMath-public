@@ -19,4 +19,7 @@
 
 // Same as above, but with a pre-allocated plan.
 - (SMUGRealVector*)ifftWithPlan:(SMUGRealFFTPlan*)inPlan;
+
+// Same as above, but with a pre-allocated output vector as well.
+- (void)ifftIntoRealVector:(SMUGRealVector*)inRealVector withPlan:(SMUGRealFFTPlan*)inPlan;
 @end

@@ -20,4 +20,7 @@
 // Same as above, but you can use a pre-allocated plan to save a bit of time
 - (SMUGComplexVector*)fftWithPlan:(SMUGRealFFTPlan*)inPlan;
 
+// Same as above, but you can also use a pre-allocated output vector.
+- (void)fftIntoComplexVector:(SMUGComplexVector*)inComplexVector withPlan:(SMUGRealFFTPlan*)inPlan;
+
 @end
