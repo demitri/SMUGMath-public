@@ -334,6 +334,20 @@
     vDSP_vadd( myComponents, 1, xComponents, 1, myComponents, 1, myNumComponents );
 }
 
+- (void)subtract:(SMUGRealVector*)x;
+{
+    float           *xComponents = [x components];
+    unsigned int    xNumComponents = [x length];
+    float           *myComponents = [self components];
+    unsigned int    myNumComponents = [self length];
+    
+    if ( xNumComponents != myNumComponents ) {
+        [NSException raise:@"LengthMismatchException" format:@"Operand lengths do not match"];
+    }
+    
+    vDSP_vsub( xComponents, 1, myComponents, 1, myComponents, 1, myNumComponents );
+}
+
 - (void)scaleBy:(float)scalar;
 {
     float           *myComponents = [self components];
