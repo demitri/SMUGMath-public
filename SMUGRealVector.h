@@ -57,6 +57,7 @@
 
 #pragma mark Basic Math
 - (void)add:(SMUGRealVector*)x;
+- (void)subtract:(SMUGRealVector*)x;
 - (void)scaleBy:(float)scalar;
 - (void)multiplyBy:(SMUGRealVector*)x;
 - (void)divideBy:(SMUGRealVector*)x;

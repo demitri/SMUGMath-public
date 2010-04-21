@@ -259,6 +259,24 @@
     STAssertEquals( [v cumsum], 10.0f, @"Expected cumulative sum not matched" );
 }
 
+- (void)testAdditionSubtraction
+{
+    SMUGRealVector *v1 = [SMUGRealVector onesWithLength:5];
+    SMUGRealVector *v2 = [SMUGRealVector onesWithLength:5];
+    [v1 add:v2];
+    for ( unsigned int i = 0; i < [v1 length]; i++ ) {
+        STAssertEquals( [v1 componentAtIndex:i], (float)2, @"Addition failure" );
+    }
+    [v1 subtract:v2];
+    for ( unsigned int i = 0; i < [v1 length]; i++ ) {
+        STAssertEquals( [v1 componentAtIndex:i], (float)1, @"Addition failure" );
+    }    
+    [v1 subtract:v2];
+    for ( unsigned int i = 0; i < [v1 length]; i++ ) {
+        STAssertEquals( [v1 componentAtIndex:i], (float)0, @"Addition failure" );
+    }        
+}
+
 
 - (void)testResampling
 {
