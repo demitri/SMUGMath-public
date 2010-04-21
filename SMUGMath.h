@@ -10,3 +10,7 @@
 #import <SMUGMath/SMUGRealVector.h>
 #import <SMUGMath/SMUGComplexVector.h>
 #import <SMUGMath/SMUGRealMatrix.h>
+
+#import <SMUGMath/SMUGRealFFTPlan.h>
+#import <SMUGMath/SMUGRealVector_FFT.h>
+#import <SMUGMath/SMUGComplexVector_FFT.h>

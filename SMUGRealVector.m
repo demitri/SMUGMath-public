@@ -35,6 +35,17 @@
     return self;    
 }
 
+- (id)initWithBytesNoCopy:(float*)inBytes length:(NSUInteger)inLength;
+{
+    if ( !( self = [super init] ) ) {
+        return nil;
+    }
+    
+    mData = [[NSMutableData alloc] initWithBytesNoCopy:inBytes length:(inLength * sizeof(float)) freeWhenDone:NO];
+    
+    return self;
+}
+
 #pragma mark NSObject
 
 - (void)dealloc
@@ -81,6 +92,11 @@
 + (id)realVectorWithData:(NSData*)data;
 {
     return [[[SMUGRealVector alloc] initWithData:data] autorelease];
+}
+
++ (id)realVectorWithBytesNoCopy:(float*)inBytes length:(NSUInteger)inLength;
+{
+    return [[[SMUGRealVector alloc] initWithBytesNoCopy:inBytes length:inLength] autorelease];
 }
 
 + (id)realVectorWithContentsOfMappedFile:(NSString*)path;
@@ -177,6 +193,15 @@
     return returnVector;
 }
 
+- (SMUGRealVector*)realVectorInRangeNoCopy:(NSRange)inRange;
+{
+    if ( inRange.location + inRange.length > [self length] ) {
+        [NSException raise:NSRangeException
+                    format:@"Trying to retrieve vector outside bounds"];
+    }
+    return [SMUGRealVector realVectorWithBytesNoCopy:([self components] + inRange.location) length:inRange.length];
+}
+
 - (void)replaceComponentsInRange:(NSRange)range withFloats:(float*)data;
 {
     if ( range.location + range.length > [self length] ) {
@@ -254,6 +279,22 @@
     
     [self replaceComponentsInRange:NSMakeRange( 0, [b length] ) withRealVector:b];
     [self replaceComponentsInRange:NSMakeRange( [b length], [a length] ) withRealVector:a];
+}
+
+- (void)overlapAddRealVector:(SMUGRealVector*)inVector atComponent:(unsigned int)inStartIndex;
+{
+    if ( inStartIndex >= [self length] ) {
+        [NSException raise:@"OutOfBounds" format:@"Trying to overlap-add past vector length"];
+    }
+    
+    unsigned int newLength = MAX( inStartIndex + [inVector length], [self length] );
+    
+    // Resize if necessary, for convenience
+    if ( newLength > [self length] ) {
+        [self setLength:newLength];
+    }
+    
+    vDSP_vadd( ( [self components] + inStartIndex ), 1, [inVector components], 1, ( [self components] + inStartIndex ), 1, [inVector length] );
 }
 
 #pragma mark Minimum/Maximum
