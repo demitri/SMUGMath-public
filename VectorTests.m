@@ -320,4 +320,54 @@
     }    
 }
 
+- (void)testCopyfreeRange
+{
+    SMUGRealVector *ramp = [SMUGRealVector realVectorWithIntegersRangingFrom:0 to:16];
+    for ( int i = 0; i < 16; i++ ) {
+        STAssertEquals( [ramp componentAtIndex:i], (float)i, @"Components not equal" );
+    }    
+    SMUGRealVector *rampRange = [ramp realVectorInRangeNoCopy:NSMakeRange( 0, 4 )];
+    for ( int i = 0; i < 4; i++ ) {
+        STAssertEquals( [rampRange componentAtIndex:i], (float)i, @"Components not equal" );
+    }    
+    rampRange = [ramp realVectorInRangeNoCopy:NSMakeRange( 4, 4 )];
+    for ( int i = 0; i < 4; i++ ) {
+        STAssertEquals( [rampRange componentAtIndex:i], (float)(4+i), @"Components not equal" );
+    }
+}
+
+- (void)testCopyfreeAdditionRange
+{
+    NSMutableData *od = [[NSMutableData alloc] initWithLength:20];
+    NSMutableData *md = [[NSMutableData alloc] initWithBytesNoCopy:([od mutableBytes]+10) length:[od length]-10 freeWhenDone:NO];
+    
+    NSLog( @"od bytes %p", [od mutableBytes] );
+    NSLog( @"md bytes %p", [md mutableBytes] );    
+
+    SMUGRealVector *sixteenOnes = [SMUGRealVector onesWithLength:16];
+    SMUGRealVector *eightOnes = [SMUGRealVector onesWithLength:8];
+    
+    SMUGRealVector *ranged = [sixteenOnes realVectorInRangeNoCopy:NSMakeRange( 4, 8 )];
+
+    [ranged add:eightOnes];
+
+    NSLog( @"ranged %@", ranged );
+    NSLog( @"result %@", sixteenOnes );
+    NSLog( @"orig %@", eightOnes );
+    
+    NSLog( @"ranged components %p", ranged.components );
+    NSLog( @"sixteenOnes components %p", sixteenOnes.components );
+    NSLog( @"difference of %d bytes", ranged.components - sixteenOnes.components );
+    
+    for ( int i = 0; i < 4; i++ ) {
+        STAssertEquals( [sixteenOnes componentAtIndex:i], 1.0f, @"Components not equal" );
+    }
+    for ( int i = 4; i < 12; i++ ) {
+        STAssertEquals( [sixteenOnes componentAtIndex:i], 2.0f, @"Components not equal" );
+    }
+    for ( int i = 12; i < 16; i++ ) {
+        STAssertEquals( [sixteenOnes componentAtIndex:i], 1.0f, @"Components not equal" );
+    }        
+}
+
 @end
