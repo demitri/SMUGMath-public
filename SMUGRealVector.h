@@ -7,7 +7,9 @@
 
 @interface SMUGRealVector : NSObject <NSCopying,NSCoding>
 {
-    NSMutableData   *mData;
+    float *mBytes;
+    uint64_t mByteLength;
+    BOOL mFreeWhenDone;
 }
 
 #pragma mark Initializers

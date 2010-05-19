@@ -13,8 +13,10 @@
         return nil;
     }
     
-    mData = [(NSMutableData*)[NSMutableData alloc] initWithLength:( N * sizeof(float) )];
-    if ( !mData ) {
+    mFreeWhenDone = YES;    
+    mByteLength = N * sizeof(float);    
+    mBytes = calloc( mByteLength, 1 );
+    if ( !mBytes ) {
         return nil;
     }
     
@@ -27,12 +29,15 @@
         return nil;
     }
     
-    mData = [data mutableCopy];
-    if ( !mData ) {
+    mFreeWhenDone = YES;    
+    mByteLength = [data length];
+    mBytes = malloc( mByteLength );
+    if ( !mBytes ) {
         return nil;
     }
+    memcpy( mBytes, [data bytes], [data length] );
     
-    return self;    
+    return self;
 }
 
 - (id)initWithBytesNoCopy:(float*)inBytes length:(NSUInteger)inLength;
@@ -40,8 +45,10 @@
     if ( !( self = [super init] ) ) {
         return nil;
     }
-    
-    mData = [[NSMutableData alloc] initWithBytesNoCopy:inBytes length:(inLength * sizeof(float)) freeWhenDone:NO];
+
+    mFreeWhenDone = NO;    
+    mBytes = inBytes;
+    mByteLength = inLength * sizeof(float);
     
     return self;
 }
@@ -50,7 +57,10 @@
 
 - (void)dealloc
 {
-    [mData release];
+    if ( mFreeWhenDone ) {
+        free( mBytes ); mBytes = nil;
+    }
+    mByteLength = 0;
     [super dealloc];
 }
 
@@ -148,18 +158,18 @@
 
 - (void)writeToFile:(NSString*)path;
 {
-    [mData writeToFile:path atomically:NO];
+    [[NSData dataWithBytesNoCopy:mBytes length:mByteLength] writeToFile:path atomically:NO];
 }
 
 #pragma mark Accessors
 
 - (unsigned int)length;
 {
-    return [mData length] / sizeof(float);
+    return mByteLength / sizeof(float);
 }
 - (float*)components;
 {
-    return (float*)[mData mutableBytes];
+    return mBytes;
 }
 - (void)setComponent:(float)val atIndex:(unsigned int)index;
 {
@@ -208,8 +218,7 @@
         [NSException raise:NSRangeException
                     format:@"Trying to replace floats outside range"];
     }
-    [mData replaceBytesInRange:NSMakeRange( range.location * sizeof(float), range.length * sizeof(float) )
-                     withBytes:data];
+    memcpy( ( mBytes + range.location ), data, range.length * sizeof(float) );
 }
 
 - (void)replaceComponentsInRange:(NSRange)range withRealVector:(SMUGRealVector*)v;
@@ -227,25 +236,30 @@
 {
     unsigned int    myLength = [self length];
     if ( N != myLength ) {
-        [mData setLength:(( myLength + ( N - myLength ) ) * sizeof(float))];
+        mBytes = realloc( mBytes, N * sizeof(float) );
+        mByteLength = N * sizeof(float);
     }
 }
 
 - (void)increaseLengthBy:(unsigned int)N;
 {
     if ( N != 0 ) {
-        [mData increaseLengthBy:(N * sizeof(float))];
+        mBytes = realloc( mBytes, mByteLength + ( N * sizeof(float) ) );
+        mByteLength += N * sizeof(float);
     }
 }
 
 - (void)appendVector:(SMUGRealVector*)v;
 {
-    [mData appendBytes:[v components] length:([v length] * sizeof(float))];
+    uint64_t origLength = [self length];
+    [self increaseLengthBy:[v length]];
+    [self replaceComponentsInRange:NSMakeRange( origLength, [v length] ) withRealVector:v];
 }
 
 - (void)appendComponent:(float)c;
 {
-    [mData appendBytes:&c length:sizeof(float)];
+    [self increaseLengthBy:1];
+    [self setComponent:c atIndex:([self length] - 1)];
 }
 
 #pragma mark Manipulation Routines
@@ -676,20 +690,19 @@
 
 - (id)initWithCoder:(NSCoder*)coder;
 {
-    self = [self init];
-    if ( self ) {
-        mData = [[coder decodeObjectForKey:@"VectorData"] retain];
-        [mData smug_swapFloatsBigToHostIfRequired];
-    }
-    return self;
+    NSMutableData *aData = [[[coder decodeObjectForKey:@"VectorData"] mutableCopy] autorelease];
+    [aData smug_swapFloatsBigToHostIfRequired];
+    
+    return [self initWithData:aData];
 }
 
 - (void)encodeWithCoder:(NSCoder*)coder;
 {
+    NSMutableData *aData = [[[NSData dataWithBytesNoCopy:mBytes length:mByteLength] mutableCopy] autorelease];
     if ( CFByteOrderGetCurrent() == CFByteOrderLittleEndian ) {
-        [coder encodeObject:[mData smug_swappedFloat32HostToBig] forKey:@"VectorData"];
+        [coder encodeObject:[aData smug_swappedFloat32HostToBig] forKey:@"VectorData"];
     } else {
-        [coder encodeObject:mData forKey:@"VectorData"];
+        [coder encodeObject:aData forKey:@"VectorData"];
     }
 }
 

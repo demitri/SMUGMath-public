@@ -320,6 +320,17 @@
     }    
 }
 
+- (void)testCopyFreePointers
+{
+    SMUGRealVector *ramp = [SMUGRealVector realVectorWithIntegersRangingFrom:0 to:16];
+    SMUGRealVector *rampRange = [ramp realVectorInRangeNoCopy:NSMakeRange( 0, 4 )];
+    
+    STAssertEquals( [ramp components], [rampRange components], @"Pointers are not equal!!" );
+
+    SMUGRealVector *rampRange2 = [ramp realVectorInRangeNoCopy:NSMakeRange( 4, 4 )];    
+    STAssertEquals( ( [ramp components] + 4 ), [rampRange2 components], @"Pointers are not equal!!" );
+}
+
 - (void)testCopyfreeRange
 {
     SMUGRealVector *ramp = [SMUGRealVector realVectorWithIntegersRangingFrom:0 to:16];
