@@ -7,18 +7,17 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "kiss_fftr.h"
 
 @interface SMUGRealFFTPlan : NSObject {
     uint32_t mFFTSize;
-    kiss_fftr_cfg mForwardPlan;
-    kiss_fftr_cfg mInversePlan;
+    void *mForwardPlan;
+    void *mInversePlan;
 }
 
 - (id)initWithFFTSize:(uint32_t)inFFTSize;
 
-@property (readonly,assign) kiss_fftr_cfg forwardPlan;
-@property (readonly,assign) kiss_fftr_cfg inversePlan;
+@property (readonly,assign) void *forwardPlan;
+@property (readonly,assign) void *inversePlan;
 @property (readonly,assign) uint32_t fftSize;
 
 @end

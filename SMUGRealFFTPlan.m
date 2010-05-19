@@ -7,6 +7,7 @@
 //
 
 #import "SMUGRealFFTPlan.h"
+#import "kiss_fftr.h"
 
 @implementation SMUGRealFFTPlan
 
