@@ -349,26 +349,12 @@
 
 - (void)testCopyfreeAdditionRange
 {
-    NSMutableData *od = [[NSMutableData alloc] initWithLength:20];
-    NSMutableData *md = [[NSMutableData alloc] initWithBytesNoCopy:([od mutableBytes]+10) length:[od length]-10 freeWhenDone:NO];
-    
-    NSLog( @"od bytes %p", [od mutableBytes] );
-    NSLog( @"md bytes %p", [md mutableBytes] );    
-
     SMUGRealVector *sixteenOnes = [SMUGRealVector onesWithLength:16];
     SMUGRealVector *eightOnes = [SMUGRealVector onesWithLength:8];
     
     SMUGRealVector *ranged = [sixteenOnes realVectorInRangeNoCopy:NSMakeRange( 4, 8 )];
 
     [ranged add:eightOnes];
-
-    NSLog( @"ranged %@", ranged );
-    NSLog( @"result %@", sixteenOnes );
-    NSLog( @"orig %@", eightOnes );
-    
-    NSLog( @"ranged components %p", ranged.components );
-    NSLog( @"sixteenOnes components %p", sixteenOnes.components );
-    NSLog( @"difference of %d bytes", ranged.components - sixteenOnes.components );
     
     for ( int i = 0; i < 4; i++ ) {
         STAssertEquals( [sixteenOnes componentAtIndex:i], 1.0f, @"Components not equal" );
